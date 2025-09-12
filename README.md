@@ -55,7 +55,7 @@ curl -X POST http://localhost:5000/transactions -H "Authorization: Bearer <TOKEN
 curl http://localhost:5000/transactions -H "Authorization: Bearer <TOKEN>"
 ```
 
-## Deploying to Render (free)
+## Deploying to Render
 
 1. Push this repo to GitHub.
 2. Create a **Render > Web Service**: connect repo, choose Node 18, build command `npm install && npm run build`, start command `npm start`.
@@ -65,6 +65,10 @@ curl http://localhost:5000/transactions -H "Authorization: Bearer <TOKEN>"
    - `JWT_SECRET` = a long random string
    - `PORT` = `5000`
 5. Redeploy. After healthy, hit `/health` and `/docs` (when added).
+
+Live API: https://ledgerlink-api-mrpk.onrender.com
+Try: /health, /auth/signup, /auth/login, /users/me, /transactions
+
 
 ## Notes
 - This is intentionally small but production-leaning: validation, JWT, rate limiting, logging.
