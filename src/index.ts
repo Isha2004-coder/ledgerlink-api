@@ -16,6 +16,21 @@ const limiter = rateLimit({ windowMs: 60_000, max: 60 });
 app.use(limiter);
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
+app.get("/", (_req, res) => {
+  res.json({
+    ok: true,
+    service: "LedgerLink API",
+    message: "Welcome to LedgerLink! A demo backend with JWT auth, REST APIs, and PostgreSQL.",
+    try: [
+      "/health",
+      "/auth/signup",
+      "/auth/login",
+      "/users/me",
+      "/transactions"
+    ],
+    repo: "https://github.com/Isha2004-coder/ledgerlink-api"
+  });
+});
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
