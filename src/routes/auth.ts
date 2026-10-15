@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { asyncHandler } from "../middleware/asyncHandler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import pool from "../db/db";
@@ -11,7 +12,7 @@ const credsSchema = z.object({
   password: z.string().min(6)
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", asyncHandler(async (req, res) => {
   const parsed = credsSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json(parsed.error.flatten());
 
@@ -28,9 +29,9 @@ router.post("/signup", async (req, res) => {
     [email, hashed]
   );
   return res.status(201).json(result.rows[0]);
-});
+}));
 
-router.post("/login", async (req, res) => {
+router.post("/login", asyncHandler(async (req, res) => {
   const parsed = credsSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json(parsed.error.flatten());
 
@@ -43,6 +44,6 @@ router.post("/login", async (req, res) => {
 
   const token = jwt.sign({ id: rows[0].id }, process.env.JWT_SECRET || "dev_secret", { expiresIn: "1h" });
   return res.json({ token });
-});
+}));
 
 export default router;
