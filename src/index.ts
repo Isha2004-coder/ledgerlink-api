@@ -8,6 +8,7 @@ import userRoutes from "./routes/users";
 import transactionRoutes from "./routes/transactions";
 import pool from "./db/db";
 import { initDb } from "./db/init";
+import { openApiSpec, docsHtml } from "./docs/openapi";
 
 const app = express();
 app.use(express.json());
@@ -27,11 +28,14 @@ app.get("/health/db", async (_req, res) => {
     res.status(503).json({ ok: false, db: "unavailable" });
   }
 });
+app.get("/openapi.json", (_req, res) => res.json(openApiSpec));
+app.get("/docs", (_req, res) => res.type("html").send(docsHtml));
 app.get("/", (_req, res) => {
   res.json({
     ok: true,
     service: "LedgerLink API",
     message: "Welcome to LedgerLink! A demo backend with JWT auth, REST APIs, and PostgreSQL.",
+    docs: "/docs",
     try: [
       "/health",
       "/auth/signup",
