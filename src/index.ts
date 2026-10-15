@@ -9,6 +9,7 @@ import transactionRoutes from "./routes/transactions";
 import pool from "./db/db";
 import { initDb } from "./db/init";
 import { openApiSpec, docsHtml } from "./docs/openapi";
+import { landingHtml } from "./docs/landing";
 
 const app = express();
 app.use(express.json());
@@ -30,7 +31,9 @@ app.get("/health/db", async (_req, res) => {
 });
 app.get("/openapi.json", (_req, res) => res.json(openApiSpec));
 app.get("/docs", (_req, res) => res.type("html").send(docsHtml));
-app.get("/", (_req, res) => {
+app.get("/", (req, res) => {
+  // Browsers get a landing page. curl and other API clients keep getting JSON.
+  if (req.accepts(["json", "html"]) === "html") return res.type("html").send(landingHtml);
   res.json({
     ok: true,
     service: "LedgerLink API",
